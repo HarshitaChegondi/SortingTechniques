@@ -1,0 +1,577 @@
+<html lang="en">
+<head>
+  
+  <meta charset="utf-8">
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style type="text/css">
+  	#b1{
+  			paddding-top: 100px;
+  	}
+  </style>
+
+  <script type="text/JavaScript">
+  	
+    function myRandomInts(limit, generateRand){
+  const set = new Set()
+  while(set.size < limit) {
+    set.add(Math.floor(Math.random() * generateRand) + 1)
+  }
+  return set;
+};
+var text;
+var lt;
+function varFunc(){
+	lt = document.getElementById('totalNum').value;
+  text = Array.from(myRandomInts(lt, 1000));
+  console.log(text);
+  var text1 = text.join(",  ");
+  document.getElementById("myDiv").textContent = text1;
+};
+
+
+function showTextBox(){
+	var arr = "0";
+	document.getElementById("text2").textContent = arr;
+};
+
+
+
+function insertionSort(arr, n) {
+    let i, j, key;
+    for (i = 1; i < n; i++) {
+        key = arr[i];
+        for (j = i - 1; j >= 0 && arr[j] > key; j--) {
+            arr[j + 1] = arr[j];
+        }
+        arr[j + 1] = key;
+    }
+    return arr;
+}
+
+function mergeSort(arr, n) {
+    if (n <= 1) {
+        return arr;
+    }
+    let mid = Math.floor(n / 2);
+    let left = arr.slice(0, mid);
+    let right = arr.slice(mid);
+    mergeSort(left, mid);
+    mergeSort(right, n - mid);
+    let i, j, k;
+    for (i = 0, j = 0, k = 0; i < mid && j < n - mid; k++) {
+        if (left[i] <= right[j]) {
+            arr[k] = left[i];
+            i++;
+        } else {
+            arr[k] = right[j];
+            j++;
+        }
+    }
+    for (; i < mid; i++, k++) {
+        arr[k] = left[i];
+    }
+    for (; j < n - mid; j++, k++) {
+        arr[k] = right[j];
+    }
+    return arr;
+}
+
+function quickSort(arr, n) {
+    if (n <= 1) {
+        return arr;
+    }
+    const pivot = arr[n - 1];
+    let smallerIndex = -1;
+    for (let j = 0; j < n - 1; j++) {
+        if (arr[j] < pivot) {
+            smallerIndex++;
+            [arr[smallerIndex], arr[j]] = [arr[j], arr[smallerIndex]];
+        }
+    }
+    smallerIndex++;
+    [arr[smallerIndex], arr[n - 1]] = [arr[n - 1], arr[smallerIndex]];
+    quickSort(arr, smallerIndex);
+    quickSort(arr.slice(smallerIndex + 1), n - smallerIndex - 1).forEach((x, index) => {
+        arr[smallerIndex + index + 1] = x;
+    });
+    return arr;
+}
+
+
+function quickSortWithMedians(arr, n) {
+  if (n <= 1) {
+    return [];
+  }
+
+  let first = arr[0];
+  let middle = arr[Math.floor((n - 1) / 2)];
+  let last = arr[n - 1];
+  let pivot = medianOfThree(first, middle, last);
+
+  let i = 0;
+  let j = 0;
+
+  for (j = 0; j < n - 1; j++) {
+    if (arr[j] < pivot) {
+      let temp = arr[i];
+      arr[i] = arr[j];
+      arr[j] = temp;
+      i++;
+    }
+  }
+
+  let temp = arr[i];
+  arr[i] = arr[n - 1];
+  arr[n - 1] = temp;
+
+  let leftMedians = quickSortWithMedians(arr.slice(0, i), i);
+  let rightMedians = quickSortWithMedians(arr.slice(i + 1), n - i - 1);
+  let medians = leftMedians.concat(rightMedians);
+  if (pivot === leftMedians[leftMedians.length - 1] || pivot === middle || pivot === rightMedians[rightMedians.length - 1]) {
+    medians.push(pivot);
+  }
+
+  return medians;
+}
+
+function medianOfThree(a, b, c) {
+  if ((a <= b && b <= c) || (c <= b && b <= a)) {
+    return b;
+  } else if ((b <= a && a <= c) || (c <= a && a <= b)) {
+    return a;
+  } else {
+    return c;
+  }
+}
+
+
+
+
+
+function heapSort(arr, n) {
+  for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
+    heapify(arr, n, i);
+  }
+
+  for (let i = n - 1; i > 0; i--) {
+    let temp = arr[0];
+    arr[0] = arr[i];
+    arr[i] = temp;
+
+    // Heapify the reduced heap
+    heapify(arr, i, 0);
+  }
+
+  return arr;
+}
+
+function heapify(arr, n, i) {
+  let largest = i;
+  let left = 2 * i + 1;
+  let right = 2 * i + 2;
+
+  if (left < n && arr[left] > arr[largest]) {
+    largest = left;
+  }
+
+  if (right < n && arr[right] > arr[largest]) {
+    largest = right;
+  }
+
+  if (largest !== i) {
+    let temp = arr[i];
+    arr[i] = arr[largest];
+    arr[largest] = temp;
+    heapify(arr, n, largest);
+  }
+}
+
+function selectionSort(arr, n) {
+  for (let i = 0; i < n - 1; i++) {
+    let minIndex = i;
+    for (let j = i + 1; j < n; j++) {
+      if (arr[j] < arr[minIndex]) {
+        minIndex = j;
+      }
+    }
+
+    let temp = arr[minIndex];
+    arr[minIndex] = arr[i];
+    arr[i] = temp;
+  }
+
+  return arr;
+}
+
+function bubbleSort(arr, n) {
+  // Perform n-1 iterations of bubble sort
+  for (let i = 0; i < n - 1; i++) {
+    // At each iteration, compare adjacent elements and swap if necessary
+    for (let j = 0; j < n - i - 1; j++) {
+      if (arr[j] > arr[j + 1]) {
+        // Swap elements
+        let temp = arr[j];
+        arr[j] = arr[j + 1];
+        arr[j + 1] = temp;
+      }
+    }
+  }
+
+  return arr;
+}
+
+
+function AnswerTechniques() {
+	var n = lt;
+const worstCaseArray = generateBestCaseArray(n);
+const bestCaseArray = generateBestCaseArray(n);
+const averageCaseArray = Array.from({ length: n }, () => Math.floor(Math.random() * n));
+
+// Insertion Sort
+console.time('Insertion Sort (Best-case)');
+insertionSort(bestCaseArray, n);
+console.timeEnd('Insertion Sort (Best-case)');
+
+console.time('Insertion Sort (Average-case)');
+insertionSort(averageCaseArray, n);
+console.timeEnd('Insertion Sort (Average-case)');
+
+
+console.time('Insertion Sort (Worst-case)');
+insertionSort(worstCaseArray, n);
+console.timeEnd('Insertion Sort (Worst-case)');
+
+
+//Quick sort
+console.time('Quick Sort (Best-case)');
+quickSort(bestCaseArray, n);
+console.timeEnd('Quick Sort (Best-case)');
+
+
+console.time('Quick Sort (Average-case)');
+quickSort(averageCaseArray, n);
+console.timeEnd('Quick Sort (Average-case)');
+
+console.time('Quick Sort (Worst-case)');
+quickSort(worstCaseArray, n);
+console.timeEnd('Quick Sort (Worst-case)');
+
+
+// Merge Sort
+console.time('Merge Sort (Best-case)');
+mergeSort(bestCaseArray, n);
+console.timeEnd('Merge Sort (Best-case)');
+
+console.time('Merge Sort (Average-case)');
+mergeSort(averageCaseArray, n);
+console.timeEnd('Merge Sort (Average-case)');
+
+
+console.time('Merge Sort (Worst-case)');
+mergeSort(worstCaseArray, n);
+console.timeEnd('Merge Sort (Worst-case)');
+
+
+// Selection Sort
+console.time('Selection Sort (Best-case)');
+selectionSort(bestCaseArray, n);
+console.timeEnd('Selection Sort (Best-case)');
+
+console.time('Selection Sort (Average-case)');
+selectionSort(averageCaseArray, n);
+console.timeEnd('Selection Sort (Average-case)');
+
+
+console.time('Selection Sort (Worst-case)');
+selectionSort(worstCaseArray, n);
+console.timeEnd('Selection Sort (Worst-case)');
+
+//Bubble Sort
+console.time('Bubble Sort (Best-case)');
+bubbleSort(bestCaseArray, n);
+console.timeEnd('Bubble Sort (Best-case)');
+
+console.time('Bubble Sort (Average-case)');
+bubbleSort(averageCaseArray, n);
+console.timeEnd('Bubble Sort (Average-case)');
+
+console.time('Bubble Sort (Worst-case)');
+bubbleSort(worstCaseArray, n);
+console.timeEnd('Bubble Sort (Worst-case)');
+
+//Heap Sort
+console.time('Heap Sort (Best-case)');
+heapSort(bestCaseArray, n);
+console.timeEnd('Heap Sort (Best-case)');
+
+console.time('Heap Sort (Average-case)');
+heapSort(averageCaseArray, n);
+console.timeEnd('Heap Sort (Average-case)');
+
+console.time('Heap Sort (Worst-case)');
+heapSort(worstCaseArray, n);
+console.timeEnd('Heap Sort (Worst-case)');
+
+  var checkBoxinsert = document.getElementById("insert");
+  var checkBoxmerge = document.getElementById("merge");
+  var checkBoxquick = document.getElementById("quick");
+  var checkBoxheap = document.getElementById("heap");
+  var checkBoxselect = document.getElementById("select");
+  var checkBoxbubble = document.getElementById("bubble");
+
+
+  if (checkBoxinsert.checked == true){
+		document.getElementById("whitespace1").style.display = "block";
+  	document.getElementById("insertH1").style.display = "block";
+  	document.getElementById("insertDiv").style.display = "block";
+  		document.getElementById("insertH1").textContent = "INSERTION SORT";
+  		document.getElementById("insertDiv").innerHTML = insertionSort(text, lt).join(",   ");
+  }
+  else{
+  	document.getElementById("whitespace1").style.display = "none";
+  	document.getElementById("insertH1").style.display = "none";
+  	document.getElementById("insertDiv").style.display = "none";
+  }
+
+  if (checkBoxmerge.checked == true){
+  	document.getElementById("whitespace2").style.display = "block";
+  	document.getElementById("mergeH1").style.display = "block";
+  	document.getElementById("mergeDiv").style.display = "block";
+  	document.getElementById("mergeH1").textContent = "MERGE SORT";
+  	document.getElementById("mergeDiv").textContent = mergeSort(text, lt).join(",    ");
+  }
+  else{
+  	document.getElementById("whitespace2").style.display = "none";
+  	document.getElementById("mergeH1").style.display = "none";
+  	document.getElementById("mergeDiv").style.display = "none";
+  }
+
+  if (checkBoxquick.checked == true){
+  	document.getElementById("whitespace3").style.display = "block";
+  	document.getElementById("quickH1").style.display = "block";
+  	document.getElementById("quickH3").style.display = "block";
+  	document.getElementById("quickDiv").style.display = "block";
+  	document.getElementById("quickH1").textContent = "QUICK SORT";
+  	document.getElementById("quickH3").textContent = "QUICK SORT USING THREE MEDIANS";
+  	document.getElementById("quickDiv").textContent = quickSort(text, lt).join(",    ");
+
+  	document.getElementById("quickDiv3").textContent = quickSortWithMedians(text, lt).join(",    ");
+
+  }
+  else{
+  	document.getElementById("whitespace3").style.display = "none";
+  	document.getElementById("quickH3").style.display = "block";
+  	document.getElementById("quickH1").style.display = "none";
+  	document.getElementById("quickDiv").style.display = "none";
+  }
+
+  if (checkBoxheap.checked == true){
+  	document.getElementById("whitespace4").style.display = "block";
+  		document.getElementById("heapH1").style.display = "block";
+  		document.getElementById("heapDiv").style.display = "block";
+  		document.getElementById("heapH1").textContent = "HEAP SORT";
+  		document.getElementById("heapDiv").textContent = heapSort(text, lt).join(",    ");
+  }
+  else{
+  	document.getElementById("whitespace4").style.display = "none";
+  	document.getElementById("heapH1").style.display = "none";
+  	document.getElementById("heapDiv").style.display = "none";
+  }
+
+  if (checkBoxselect.checked == true){
+  	document.getElementById("whitespace5").style.display = "block";
+  	document.getElementById("selectionH1").style.display = "block";
+  		document.getElementById("selectionDiv").style.display = "block";
+  		document.getElementById("selectionH1").textContent = "SELECTION SORT";
+  		document.getElementById("selectionDiv").textContent = selectionSort(text, lt).join(",    ");
+  }
+  else{
+  	document.getElementById("whitespace5").style.display = "none";
+  	document.getElementById("selectionH1").style.display = "none";
+  	document.getElementById("selectionDiv").style.display = "none";
+  }
+
+  if (checkBoxbubble.checked == true){
+  	document.getElementById("whitespace6").style.display = "block";
+  	document.getElementById("bubbleH1").style.display = "block";
+  		document.getElementById("bubbleDiv").style.display = "block";
+  		document.getElementById("bubbleH1").textContent = "BUBBLE SORT";
+  		document.getElementById("bubbleDiv").textContent = bubbleSort(text, lt).join(",    ");
+  }
+  else{
+  	document.getElementById("whitespace6").style.display = "none";
+  	document.getElementById("bubbleH1").style.display = "none";
+  	document.getElementById("bubbleDiv").style.display = "none";
+  }
+
+
+
+
+};
+
+
+
+const data = {
+  labels: [],
+  datasets: [
+    {
+      label: 'Insertion Sort',
+      data: [],
+      fill: false,
+      borderColor: '#D4684F'
+    },
+    {
+      label: 'Merge Sort',
+      data: [],
+      fill: false,
+      borderColor: '#C1C134'
+    },
+    {
+      label: 'Quick Sort',
+      data: [],
+      fill: false,
+      borderColor: '#41BA55'
+    },
+    {
+      label: 'Bubble Sort',
+      data: [],
+      fill: false,
+      borderColor: '#DA2660'
+    },
+    {
+      label: 'Heap Sort',
+      data: [],
+      fill: false,
+      borderColor: '#596DB7'
+    },
+    {
+      label: 'Selection Sort',
+      data: [],
+      fill: false,
+      borderColor: '#0EDCB0'
+    },
+    {
+      label: 'Quick Sort with 3 medians',
+      data: [],
+      fill: false,
+      borderColor: '#black'
+    }
+  ]
+};
+
+// Generate data for different array sizes
+
+for (let i = 100; i <= 1000; i += 100) {
+  const arr = Array.from({ length: i }, () => Math.floor(Math.random() * i));
+  const start = performance.now();
+  const sortedArr = insertionSort(arr, i);
+  const end = performance.now();
+  const time = end - start;
+  data.labels.push(i);
+  data.datasets[0].data.push(time);
+
+  const arr2 = Array.from({ length: i }, () => Math.floor(Math.random() * i));
+  const start2 = performance.now();
+  const sortedArr2 = mergeSort(arr2, i);
+  const end2 = performance.now();
+  const time2 = end2 - start2;
+  data.datasets[1].data.push(time2);
+
+  const arr3 = Array.from({ length: i }, () => Math.floor(Math.random() * i));
+  const start3 = performance.now();
+  const sortedArr3 = quickSort(arr3, i);
+  const end3 = performance.now();
+  const time3 = end3 - start3;
+  data.datasets[2].data.push(time3);
+
+  const arr4 = Array.from({ length: i }, () => Math.floor(Math.random() * i));
+  const start4 = performance.now();
+  const sortedArr4 = bubbleSort(arr4, i);
+  const end4 = performance.now();
+  const time4 = end4 - start4;
+  data.datasets[3].data.push(time4);
+
+  const arr5 = Array.from({ length: i }, () => Math.floor(Math.random() * i));
+  const start5 = performance.now();
+  const sortedArr5 = heapSort(arr5, i);
+  const end5 = performance.now();
+  const time5 = end5 - start5;
+  data.datasets[4].data.push(time5);
+
+  const arr6 = Array.from({ length: i }, () => Math.floor(Math.random() * i));
+  const start6 = performance.now();
+  const sortedArr6 = selectionSort(arr6, i);
+  const end6 = performance.now();
+  const time6 = end6 - start6;
+  data.datasets[5].data.push(time6);
+
+  const arr7 = Array.from({ length: i }, () => Math.floor(Math.random() * i));
+  const start7 = performance.now();
+  const sortedArr7 = quickSort(arr7, i);
+  const end7 = performance.now();
+  const time7 = end7 - start7;
+  data.datasets[6].data.push(time7);
+}
+
+
+// Create the line graph
+document.addEventListener('DOMContentLoaded', function() { 
+  const canvas = document.getElementById('myChart');
+  const context = canvas.getContext('2d');
+  const chart = new Chart(context, {
+    type: 'line',
+    data: data,
+    options: {}
+  });
+});
+
+
+	
+// Create the line graph
+document.addEventListener('DOMContentLoaded', function() { 
+  const canvas = document.getElementById('myChart');
+  const context = canvas.getContext('2d');
+  const chart = new Chart(context, {
+    type: 'line',
+    data: data,
+    options: {}
+  });
+});
+
+
+function generateBestCaseArray(n) {
+  const arr = [];
+  for (let i = 0; i < n; i++) {
+    arr.push(i);
+  }
+  return arr;
+}
+
+// Function to generate an input array that is sorted in descending order (worst-case)
+function generateWorstCaseArray(n) {
+  const arr = [];
+  for (let i = n - 1; i >= 0; i--) {
+    arr.push(i);
+  }
+  return arr;
+}
+
+ </script>
+</head>
+
+ <body>
+   <div class="jumbotron text-center">
+  <h1>Graph for Sorting Techniques</h1>
+</div>
+<div class="container">
+
+   <canvas id="myChart" width="1100" height="500"></canvas>
+
+ </body>
+</html>
